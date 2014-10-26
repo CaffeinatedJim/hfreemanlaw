@@ -1,0 +1,135 @@
+/*
+Theme Name:    Heather Freeman Law
+Description:   child theme for Shoestrap 3
+Version:       1.0
+Author:        Jim Birch
+Template:      shoestrap-3
+*/
+
+/* Common */
+body {
+    color: #121814;
+}
+
+h1, .h1,
+h2, .h2,
+h3, .h3 {
+    color: #544d51;
+}
+
+a,
+a:visited,
+.navbar li > a {
+    color: #607a6b;
+}
+
+a:active,
+a:hover {
+    color: #849992;
+    text-decoration: none;
+}
+
+/* Navbar Customizations */
+.navbar-form .form-control {
+    width: 280px;
+}
+
+.navbar.style1 .dropdown-menu a, .navbar.style1 .dropdown-menu a:hover, .navbar.style1 .dropdown-menu a:focus {
+    border-bottom: 5px solid #bbbbbb;
+    border-top: none;
+    color: #428bca;
+    padding-bottom: 0;
+}
+
+.navbar.style1 .open > a:first-child, .navbar.style1 .open > a:hover:first-child, .navbar.style1 .open > a:focus:first-child, .navbar.style1 a:hover:first-child, .navbar.style1 a:focus:first-child,
+.navbar.style1 .active > a, .navbar.style1 .active > a:hover, .navbar.style1 .active > a:focus {
+    background: transparent;
+    border-bottom: 5px solid #849992;
+    padding-bottom: 10px;
+}
+
+.navbar.style1 .navbar-nav > li > a {
+    padding-bottom: 10px;
+}
+
+/* Theme Customizations */
+.social-share {
+    margin-bottom: 1em;
+}
+
+body, ul li, .entry-summary {
+  line-height:normal !important;
+}
+
+.categories-links,
+.entry-summary {
+  margin-bottom:20px;
+}
+
+textarea.wpcf7-textarea {
+    height: auto;
+}
+
+#wrap-main-section {
+    margin-top: 10px;
+}
+
+.alignleft {
+    margin-right: 20px;
+    margin-bottom: 20px;
+}
+
+.alignright {
+    margin-left: 20px;
+    margin-bottom: 20px;
+}
+
+.entry-summary, .entry-content {
+    margin-top: 0;
+    margin-bottom: 1em;
+}
+
+/* Resetting Colors on Bootstrap elements */
+input[type="text"], input[type="email"], input[type="url"], input[type="tel"], input[type="number"], textarea, select, input[type="date"], input[type="email"] {
+    background-color: #BBBBBB;
+}
+
+input[type="submit"] {
+    background-color: hsl(145, 12%, 43%) !important;
+    background-repeat: repeat-x; filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#849992", endColorstr="#607a6b");
+    background-image: -khtml-gradient(linear, left top, left bottom, from(#849992), to(#607a6b));
+    background-image: -moz-linear-gradient(top, #849992, #607a6b);
+    background-image: -ms-linear-gradient(top, #849992, #607a6b);
+    background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #849992), color-stop(100%, #607a6b));
+    background-image: -webkit-linear-gradient(top, #849992, #607a6b);
+    background-image: -o-linear-gradient(top, #849992, #607a6b);
+    background-image: linear-gradient(#849992, #607a6b);
+    border-color: #607a6b #607a6b hsl(145, 12%, 43%);
+    color: #fff !important;
+    text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.49);
+    -webkit-font-smoothing: antialiased;
+}
+
+.pagination > li > a, .pagination > li > span {
+    color: #849992;
+}
+
+.pagination > li > a:hover, .pagination > li > span:hover, .pagination > li > a:focus, .pagination > li > span:focus {
+    color: #607a6b;
+}
+
+.pagination > .active > a, .pagination > .active > span, .pagination > .active > a:hover, .pagination > .active > span:hover, .pagination > .active > a:focus, .pagination > .active > span:focus {
+    background-color: #849992;
+    border-color: #849992;
+}
+
+
+a.thumbnail:hover, a.thumbnail:focus, a.thumbnail.active {
+    border-color: #223d29;
+}
+
+input[type="text"]:focus, input[type="email"]:focus, input[type="url"]:focus, input[type="tel"]:focus, input[type="number"]:focus, textarea:focus, select:focus, input[type="date"]:focus, input[type="email"]:focus {
+    border-color: #223d29;
+    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075) inset, 0 0 8px rgba(34, 61, 41, 0.6);
+    outline: 0 none;
+}
