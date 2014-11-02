@@ -6,6 +6,16 @@ Author:        Jim Birch
 Template:      shoestrap-3
 */
 
+/* 
+Benjamin Moore Colors Heather likes:
+====================================
+Seacliff Height: rgb(187,206,201);
+Rhine River: rgb(165,188,183);
+Dartmouth Green: rgb(117,143,137);
+Amsterdam: rgb(130,149,158);
+Purple Haze: rgb(131,128,147);
+*/
+
 /* Common */
 body {
     color: #121814;
@@ -21,12 +31,12 @@ h3, .h3 {
 a,
 a:visited,
 .navbar li > a {
-    color: #607a6b;
+    color: rgb(130,149,158);
 }
 
 a:active,
 a:hover {
-    color: #849992;
+    color: rgb(131,128,147);
     text-decoration: none;
 }
 
@@ -35,6 +45,17 @@ p, ul {
 }
 
 /* Navbar Customizations */
+.navbar-default {
+    background: #bbcec9; /* Old browsers */
+    background: -moz-linear-gradient(top,  #bbcec9 0%, #a5bcb7 100%); /* FF3.6+ */
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#bbcec9), color-stop(100%,#a5bcb7)); /* Chrome,Safari4+ */
+    background: -webkit-linear-gradient(top,  #bbcec9 0%,#a5bcb7 100%); /* Chrome10+,Safari5.1+ */
+    background: -o-linear-gradient(top,  #bbcec9 0%,#a5bcb7 100%); /* Opera 11.10+ */
+    background: -ms-linear-gradient(top,  #bbcec9 0%,#a5bcb7 100%); /* IE10+ */
+    background: linear-gradient(to bottom,  #bbcec9 0%,#a5bcb7 100%); /* W3C */
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#bbcec9', endColorstr='#a5bcb7',GradientType=0 ); /* IE6-9 */
+}
+
 .navbar-brand {
     float: left;
     height: 50px;
@@ -109,11 +130,20 @@ textarea.wpcf7-textarea {
 
 /* Resetting Colors on Bootstrap elements */
 input[type="text"], input[type="email"], input[type="url"], input[type="tel"], input[type="number"], textarea, select, input[type="date"], input[type="email"] {
-    background-color: #BBBBBB;
+    background-color: #ededed;
 }
 
 input[type="submit"] {
-    background-color: #BBBBBB;
+    background: #bbcec9; /* Old browsers */
+    background: -moz-linear-gradient(top,  #bbcec9 0%, #a5bcb7 100%); /* FF3.6+ */
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#bbcec9), color-stop(100%,#a5bcb7)); /* Chrome,Safari4+ */
+    background: -webkit-linear-gradient(top,  #bbcec9 0%,#a5bcb7 100%); /* Chrome10+,Safari5.1+ */
+    background: -o-linear-gradient(top,  #bbcec9 0%,#a5bcb7 100%); /* Opera 11.10+ */
+    background: -ms-linear-gradient(top,  #bbcec9 0%,#a5bcb7 100%); /* IE10+ */
+    background: linear-gradient(to bottom,  #bbcec9 0%,#a5bcb7 100%); /* W3C */
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#bbcec9', endColorstr='#a5bcb7',GradientType=0 ); /* IE6-9 */
+    border-color: #bbcec9;
+    color: #121814;
 }
 
 .pagination > li > a, .pagination > li > span {
@@ -131,12 +161,12 @@ input[type="submit"] {
 
 
 a.thumbnail:hover, a.thumbnail:focus, a.thumbnail.active {
-    border-color: #223d29;
+    border-color: rgb(130,149,158);
 }
 
 input[type="text"]:focus, input[type="email"]:focus, input[type="url"]:focus, input[type="tel"]:focus, input[type="number"]:focus, textarea:focus, select:focus, input[type="date"]:focus, input[type="email"]:focus {
-    border-color: #223d29;
-    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075) inset, 0 0 8px rgba(34, 61, 41, 0.6);
+    border-color: rgb(130,149,158);
+    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075) inset, 0 0 8px rgba(130, 149, 158, 0.6);
     outline: 0 none;
 }
 
@@ -163,6 +193,10 @@ input[type="text"]:focus, input[type="email"]:focus, input[type="url"]:focus, in
 
 /* Landscape phones and down */
 @media (max-width: 480px) {
+    .navbar a.navbar-brand {
+        font-variant: small-caps;
+    }
+
     #in-navbar {
         float: none;
         margin-top: 48px;
@@ -171,6 +205,10 @@ input[type="text"]:focus, input[type="email"]:focus, input[type="url"]:focus, in
  
 /* Landscape phone to portrait tablet */
 @media (max-width: 768px) {
+    .navbar a.navbar-brand {
+        font-variant: small-caps;
+    }
+
     #in-navbar {
         float: none;
         margin-top: 24px;
@@ -181,6 +219,7 @@ input[type="text"]:focus, input[type="email"]:focus, input[type="url"]:focus, in
 @media (min-width: 768px) and (max-width: 940px) { 
     .navbar a.navbar-brand {
         font: 400 18px/18px "old standard tt";
+        font-variant: small-caps;
     }
 
     #in-navbar {
@@ -193,6 +232,7 @@ input[type="text"]:focus, input[type="email"]:focus, input[type="url"]:focus, in
 @media (min-width: 941px) and (max-width: 1209px) { 
     .navbar a.navbar-brand {
         font: 400 20px/20px "old standard tt";
+        font-variant: small-caps;
     }
 
     #in-navbar p {
