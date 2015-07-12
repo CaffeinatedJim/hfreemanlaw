@@ -137,6 +137,14 @@ input[type="text"], input[type="email"], input[type="url"], input[type="tel"], i
     background-color: #ededed;
 }
 
+.widget select {
+    background-color: #ededed;
+    color: #121814;
+    font-size: 100%;
+    height: 100%;
+    width: 100%;
+}
+
 input[type="submit"] {
     background: #bbcec9; /* Old browsers */
     background: -moz-linear-gradient(top,  #bbcec9 0%, #a5bcb7 100%); /* FF3.6+ */
