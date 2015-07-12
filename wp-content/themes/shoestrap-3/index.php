@@ -1,4 +1,5 @@
 <header>
+	<title><?php echo shoestrap_title(); ?></title>
 	<h1 class="entry-title"><?php echo shoestrap_title(); ?></h1>
 </header>
 
