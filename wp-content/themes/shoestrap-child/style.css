@@ -24,12 +24,12 @@ body {
 h1, .h1,
 h2, .h2,
 h3, .h3 {
-    text-transform: uppercase;
+    font-variant: small-caps;
     color: #544d51;
 }
 
 #copyright-bar {
-    text-transform: uppercase;
+    font-variant: small-caps;
 }
 
 a,
