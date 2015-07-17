@@ -13,4 +13,5 @@
 
     <link rel="alternate" type="application/rss+xml" title="<?php echo get_bloginfo('name'); ?> Feed" href="<?php echo esc_url(get_feed_link()); ?>">
     <link rel='stylesheet' href='/wp-content/themes/shoestrap-child/style.css' type='text/css' media='all' />
+    <?php if ( !is_user_logged_in() ){ ?><style>#wpadminbar{ display:none; }</style><?php } ?>
 </head>

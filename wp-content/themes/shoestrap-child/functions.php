@@ -1,10 +1,5 @@
 <?php
 
-/* Disable the WordPress Admin Bar for all but admins. */
-if (!current_user_can('administrator')):
-show_admin_bar(false);
-endif;
-
 // Disable support for comments and trackbacks in post types
 function df_disable_comments_post_types_support() {
     $post_types = get_post_types();
