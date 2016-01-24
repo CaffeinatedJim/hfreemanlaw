@@ -32,18 +32,26 @@
 }
 
 /** Slider Controls **/
-.customize-control-slider .ui-slider .ui-slider-handle {
-  background-color: COLOR_ACCENT;
+.customize-control-slider input[type=range]::-webkit-slider-thumb,
+.customize-control-slider input[type=range]::-webkit-slider-thumb,
+.customize-control-slider input[type=range]::-moz-range-thumb,
+.customize-control-slider input[type=range]::-ms-thumb,
+.customize-control-slider .kirki_range_value {
+  background-color: COLOR_ACCENT !important;
 }
 
 /** Switch Controls **/
-.customize-control-switch .fs-checkbox-toggle.fs-checkbox-checked .fs-checkbox-flag {
+.customize-control-switch .switch input:checked + label {
   background: COLOR_ACCENT;
+  color: COLOR_ACCENT_TEXT
 }
 
 /** Toggle Controls **/
-.customize-control-toggle .fs-checkbox-toggle.fs-checkbox-checked .fs-checkbox-flag {
+.customize-control-toggle input:checked + .switch:after {
   background: COLOR_ACCENT;
+}
+.customize-control-toggle input:checked + .switch {
+  background: COLOR_ACCENT_TEXT;
 }
 
 /** Sortable Controls **/

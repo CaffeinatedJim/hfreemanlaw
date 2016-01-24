@@ -1,10 +1,10 @@
 === Kirki ===
-Contributors: aristath, fovoc
+Contributors: aristath, fovoc, igmoweb
 Tags: customizer,options framework, theme, mods, toolkit
 Donate link: http://kirki.org/
 Requires at least: 4.0
 Tested up to: 4.3
-Stable tag: 1.0.2
+Stable tag: 2.0.7
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -19,6 +19,8 @@ It does not replace the WordPress Customizer API, you can still use the default 
 An excellent handbook for the WordPress Customizer can be found on the [developer.wordpress.org](https://developer.wordpress.org/themes/advanced-topics/customizer-api/) website.
 
 What Kirki does is save you time... LOTS of time!
+
+[![Build Status](https://travis-ci.org/aristath/kirki.svg?branch=master)](https://travis-ci.org/aristath/kirki) [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/aristath/kirki/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/aristath/kirki/?branch=master) [![Code Climate](https://codeclimate.com/github/aristath/kirki/badges/gpa.svg)](https://codeclimate.com/github/aristath/kirki) [![Coverage Status](https://coveralls.io/repos/aristath/kirki/badge.svg?branch=master)](https://coveralls.io/r/aristath/kirki?branch=master) [![License](https://img.shields.io/badge/license-GPL--2.0%2B-red.svg)](https://raw.githubusercontent.com/aristath/kirki/master/LICENSE) [![Join the chat at https://gitter.im/aristath/kirki](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/aristath/kirki?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
 **Configurations**
 
@@ -69,9 +71,11 @@ Feel free to improve them! :)
 **Available Control types:**
 
 * checkbox
+* code
 * color-alpha
 * color
 * custom
+* dimension
 * dropdown-pages
 * editor
 * image
@@ -81,15 +85,16 @@ Feel free to improve them! :)
 * radio-buttonset
 * radio-image
 * radio
+* repeater
 * select
-* select2
-* select2-multiple
 * slider
 * sortable
+* spacing
 * switch
 * text
 * textarea
 * toggle
+* typography
 
 All development is done on github on https://github.com/aristath/kirki
 
@@ -110,9 +115,120 @@ Please visit https://github.com/aristath/kirki/wiki/Embedding-in-a-theme for doc
 
 == Sample Theme ==
 
-To get an idea on how to include Kirki in your next project, you can take a look at the [Ornea theme](https://github.com/aristath/ornea).
+To get an idea on how to include Kirki in your next project, you can take a look at the [Ornea theme](https://github.com/aristath/ornea) or use our test theme from https://github.com/aristath/kirki-demo.
 
 == Changelog ==
+
+= 2.0.7 =
+
+January 19, 2016, dev time: 1 hour
+
+* FIX: Narrow the scope of "multicheck" modification checker (props @chetzof)
+* FIX: PHP warnings due to invalid callback method
+* FIX: postMessage bug introduced in 2.0.6 (2 lines commented-out)
+
+= 2.0.6 =
+
+January 18, 2016, dev time: 7 hours
+
+* FIX: Fix active callback for multidimensional arrays. (props @andrezrv)
+* FIX: Correctly check current value of checkbox control. (props @andrezrv)
+* FIX: Bug in the sortable field (props @daviedR)
+* FIX: Fixed some bugs that occured when using serialized options instead of theme_mods
+* NEW: Added an image sub-field to repeater fields (props @sayedwp)
+* NEW: Added a JS callback to js_vars (props @pingram3541)
+* TWEAK: Settings sanitization
+* TWEAK: Removed demo theme from the plugin. This is now provided separately on https://github.com/aristath/kirki-demo
+
+= 2.0.5 =
+
+December 23, 2015, dev time: 2.5 hours
+
+* FIX: Disabled the ajax-loading method for stylesheets. All styles are now added inline. Will be re-examined for a future release.
+* FIX: Number controls were not properly triggering changes
+* FIX: Styling for number controls
+* FIX: In some cases the dynamic CSS was added before the main stylesheet. We now add them using a priority of 999 to ensure they are enqueued afterwards.
+
+= 2.0.4 =
+
+December 19, 2015, dev time: 3 hours
+
+* NEW: Added units support to the Typography field
+* NEW: Default methods of enqueuing styles in now inline.
+* NEW: Added 'inline_css' argument to config. set to false to add styles using AJAX.
+* FIX: HTML mode for CodeMirror now functional
+* FIX: PHP Notices when the config filter is used wrong
+* FIX: Monor bugfix for text inputs
+* FIX: Indentation & coding standards
+* FIX: failing PHPUNIT test.
+* TWEAK: Remove passing click event object
+
+= 2.0.3 =
+
+December 6, 2015, dev time: 45 minutes
+
+* Bugfix for updates
+
+= 2.0.2 =
+
+December 6, 2015, dev time: 30 minutes
+
+* FIX: Fatal error on update (not on new installations)
+* FIX: Typo
+
+= 2.0.1 =
+
+December 6, 2015, dev time: 10 minutes
+
+* FIX: Some configurations were failing with the new autoloader. Reverted to a simpler file structure.
+
+= 2.0 =
+
+December 6, 2015, dev time > 140 hours
+
+* NEW: Added support for `sanitize_callback` arguments on each item in the CSS `output`.
+* NEW: Added the ability to define an array as element in the `output`.
+* NEW: Auto-prefixing CSS output for cross-browser compatibilities.
+* NEW: Allow using arrays in settings.
+* NEW: Dimension Field.
+* NEW: Repeater Field.
+* NEW: Code Field using the ACE editor.
+* NEW: Typography Control.
+* NEW: Preset Field.
+* NEW: Demo theme.
+* NEW: Spacing Control.
+* REMOVED: Redux Framework compatibility.
+* FIX: Minor bugfixes to the Kirki_Color class.
+* FIX: kirki_get_option now uses Kirki::get_option().
+* FIX: Various bugfixes.
+* TWEAK: Converted the `checkbox` control to use the JS templating system.
+* TWEAK: Converted the `custom` control to use the JS templating system.
+* TWEAK: Converted the `multicheck` control to use the JS templating system.
+* TWEAK: Converted the `number` control to use the JS templating system.
+* TWEAK: Converted the `palette` control to use the JS templating system.
+* TWEAK: Converted the `radio-buttonset` control to use the JS templating system.
+* TWEAK: Converted the `radio-image` control to use the JS templating system.
+* TWEAK: Converted the `radio` control to use the JS templating system.
+* TWEAK: Converted the `select` control to use the JS templating system.
+* TWEAK: Converted the `slider` control to use the JS templating system.
+* TWEAK: Converted the `switch` control to use the JS templating system.
+* TWEAK: Converted the `textarea` control to use the JS templating system.
+* TWEAK: Converted the `toggle` control to use the JS templating system.
+* TWEAK: `radio-buttonset` controls are now CSS-only.
+* TWEAK: `radio-image` controls are now CSS-only.
+* TWEAK: `select` controls nopw use [selectize](http://brianreavis.github.io/selectize.js/) instead of [Select2](https://select2.github.io/).
+* TWEAK: Deprecated `select2` and `select2-multiple` controls. We now have a global `select` control. Previous implementations gracefully fallback to the current one.
+* TWEAK: `switch` controls are now CSS-only.
+* TWEAK: `toggle` controls are now CSS-only.
+* TWEAK: Sliders now use an HTML5 "range" input instead of jQuery-UI.
+* TWEAK: Better coding standards.
+* TWEAK: Descriptions styling.
+* TWEAK: Improved controls styling.
+* TWEAK: Compiled CSS & JS for improved performance.
+* TWEAK: Added prefix to the sanitized output array.
+* TWEAK: Updated google-fonts.
+* TWEAK: Grunt integration.
+* TWEAK: Some Code refactoring.
 
 = 1.0.2 =
 
