@@ -1,10 +1,10 @@
 <?php
 
-// This is a compatibility library, using Amazon's official PHP SDK (PHP 5.3.3+), but providing the methods of Donovan Schönknecht's S3.php library (which we used to always use) - but we've only cared about making code-paths in UpdraftPlus work, so be careful if re-reploying this in another project. And, we have a few bits of UpdraftPlus-specific code below, for logging.
+// This is a compatibility library, using Amazon's official PHP SDK (PHP 5.3.3+), but providing the methods of Donovan Schönknecht's S3.php library (which we used to always use) - but we've only cared about making code-paths in UpdraftPlus work, so be careful if re-deploying this in another project. And, we have a few bits of UpdraftPlus-specific code below, for logging.
 
 /**
 *
-* Copyright (c) 2012-5, David Anderson (http://www.simbahosting.co.uk).  All rights reserved.
+* Copyright (c) 2012-5, David Anderson (https://www.simbahosting.co.uk).  All rights reserved.
 * Portions copyright (c) 2011, Donovan Schönknecht.  All rights reserved.
 *
 * Redistribution and use in source and binary forms, with or without
@@ -31,7 +31,7 @@
 * Amazon S3 is a trademark of Amazon.com, Inc. or its affiliates.
 */
 
-require_once(UPDRAFTPLUS_DIR.'/oc/autoload.php');
+require_once(UPDRAFTPLUS_DIR.'/vendor/autoload.php');
 
 # SDK uses namespacing - requires PHP 5.3 (actually the SDK states its requirements as 5.3.3)
 use Aws\S3;
@@ -396,7 +396,11 @@ class UpdraftPlus_S3_Compat
 			return $results;
 
 		} catch (Exception $e) {
-			return $this->trigger_from_exception($e);
+			if ($this->useExceptions) {
+				throw $e;
+			} else {
+				return $this->trigger_from_exception($e);
+			}
 		}
 	}
 
@@ -423,12 +427,17 @@ class UpdraftPlus_S3_Compat
 	*/
 	public function putBucket($bucket, $acl = self::ACL_PRIVATE, $location = false)
 	{
+		if (!$location) {
+			$location = $this->region;
+		} else {
+			$this->setRegion($location);
+		}
 		$bucket_vars = array(
 			'Bucket' => $bucket,
 			'ACL' => $acl,
 		);
 		// http://docs.aws.amazon.com/aws-sdk-php/latest/class-Aws.S3.S3Client.html#_createBucket
-		$location_constraint = apply_filters('updraftplus_s3_putbucket_defaultlocation', $this->region);
+		$location_constraint = apply_filters('updraftplus_s3_putbucket_defaultlocation', $location);
 		if ('us-east-1' != $location_constraint) $bucket_vars['LocationConstraint'] = $location_constraint;
 		try {
 			$result = $this->client->createBucket($bucket_vars);
@@ -658,17 +667,19 @@ class UpdraftPlus_S3_Compat
 	* @param string $bucket Bucket name
 	* @param string $uri Object URI
 	* @param mixed $saveTo Filename or resource to write to
-	* @param boolean resume, if possible
+	* @param mixed $resume - if $saveTo is a resource, then this is either false or the value for a Range: header; otherwise, a boolean, indicating whether to resume if possible.
 	* @return mixed
 	*/
-	// In UpdraftPlus, $saveTo is always a filename
 	public function getObject($bucket, $uri, $saveTo = false, $resume = false)
 	{
 		try {
 			// SaveAs: "Specify where the contents of the object should be downloaded. Can be the path to a file, a resource returned by fopen, or a Guzzle\Http\EntityBodyInterface object." - http://docs.aws.amazon.com/aws-sdk-php/latest/class-Aws.S3.S3Client.html#_getObject
 
 			$range_header = false;
-			if (file_exists($saveTo)) {
+			if (is_resource($saveTo)) {
+				$fp = $saveTo;
+				if (!is_bool($resume)) $range_header = $resume;
+			} elseif (file_exists($saveTo)) {
 				if ($resume && ($fp = @fopen($saveTo, 'ab')) !== false) {
 					$range_header = "bytes=".filesize($saveTo).'-';
 				} else {

@@ -8,7 +8,7 @@ Read the existing methods for help. There is no hard-and-fast need to put all yo
 
 Some handy tips:
 - Search-and-replace "template" for the name of your access method
-- You can also add the methods config_print_javascript_onready and credentials_test if you like; see s3.php as an example of how these are used (to provide a "Test Settings" button via AJAX in the settings page)
+- You can also add the methods config_print_javascript_onready and credentials_test if you like
 - Name your file accordingly (it is now template.php)
 - Add the method to the array $backup_methods in updraftplus.php when ready
 - Use the constant UPDRAFTPLUS_DIR to reach Updraft's plugin directory
@@ -19,7 +19,9 @@ Some handy tips:
 
 if (!defined('UPDRAFTPLUS_DIR')) die('No direct access allowed.');
 
-class UpdraftPlus_BackupModule_template {
+if (!class_exists('UpdraftPlus_BackupModule')) require_once(UPDRAFTPLUS_DIR.'/methods/backup-module.php');
+
+class UpdraftPlus_BackupModule_template extends UpdraftPlus_BackupModule {
 
 	// backup method: takes an array, and shovels them off to the cloud storage
 	public function backup($backup_array) {

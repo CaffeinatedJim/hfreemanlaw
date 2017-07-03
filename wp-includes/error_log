@@ -1,0 +1,2 @@
+[24-Oct-2016 01:25:43 UTC] PHP Fatal error:  Call to undefined function _deprecated_file() in /home/hfreemanlaw/public_html/wp-includes/rss-functions.php on line 8
+[22-Mar-2017 13:50:00 UTC] PHP Fatal error:  Call to undefined function _deprecated_file() in /home/hfreemanlaw/public_html/wp-includes/registration-functions.php on line 7

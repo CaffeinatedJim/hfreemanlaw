@@ -1,54 +1,82 @@
 <?php
+/**
+ * The Kirki autoloader.
+ * Handles locating and loading other class-files.
+ *
+ * @package     Kirki
+ * @category    Core
+ * @author      Aristeides Stathopoulos
+ * @copyright   Copyright (c) 2017, Aristeides Stathopoulos
+ * @license     http://opensource.org/licenses/https://opensource.org/licenses/MIT
+ * @since       1.0
+ */
 
 if ( ! function_exists( 'kirki_autoload_classes' ) ) {
 	/**
 	 * The Kirki class autoloader.
 	 * Finds the path to a class that we're requiring and includes the file.
+	 *
+	 * @param string $class_name The name of the class we're trying to load.
 	 */
 	function kirki_autoload_classes( $class_name ) {
 		$paths = array();
 		if ( 0 === stripos( $class_name, 'Kirki' ) ) {
 
-			$replacements = array(
-				'Controls',
-				'Scripts',
-				'Settings',
-				'Styles',
-			);
-
-			$path     = dirname( __FILE__ ) . DIRECTORY_SEPARATOR . 'includes' . DIRECTORY_SEPARATOR;
+			// Build the filename.
 			$filename = 'class-' . strtolower( str_replace( '_', '-', $class_name ) ) . '.php';
 
-			$paths[] = $path . $filename;
-			$paths[] = dirname( __FILE__ ) . DIRECTORY_SEPARATOR . 'includes' . DIRECTORY_SEPARATOR . 'lib' . DIRECTORY_SEPARATOR . $filename;
+			// Break class-name is parts.
+			$name_parts = explode( '_', str_replace( 'Kirki_', '', $class_name ) );
 
-			foreach ( $replacements as $replacement ) {
-				if ( 0 === stripos( $class_name, 'Kirki_' . $replacement ) ) {
-					$substr   = str_replace( 'Kirki_' . $replacement, '', $class_name );
-					$exploded = explode( '_', $substr );
+			// Handle modules loading.
+			if ( isset( $name_parts[0] ) && 'Modules' === $name_parts[0] ) {
+				$path  = dirname( __FILE__ ) . '/modules/';
+				$path .= strtolower( str_replace( '_', '-', str_replace( 'Kirki_Modules_', '', $class_name ) ) ) . '/';
 
-					$paths[] = $path . strtolower( $replacement ) . DIRECTORY_SEPARATOR . $filename;
-					$paths[] = $path . strtolower( $replacement ) . DIRECTORY_SEPARATOR . strtolower( str_replace( '_', '-', str_replace( '_' . $replacement, '', str_replace( 'Kirki_' . $replacement . '_', '', $class_name ) ) ) ) . DIRECTORY_SEPARATOR . $filename;
-					if ( isset( $exploded[1] ) ) {
-						$paths[] = $path . strtolower( $replacement ) . DIRECTORY_SEPARATOR . strtolower( $exploded[1] ) . DIRECTORY_SEPARATOR . $filename;
-						if ( isset( $exploded[2] ) ) {
-							$paths[] = $path . strtolower( $replacement ) . DIRECTORY_SEPARATOR . strtolower( $exploded[1] ) . DIRECTORY_SEPARATOR . strtolower( $exploded[2] ) . DIRECTORY_SEPARATOR . $filename;
-							$paths[] = $path . strtolower( $replacement ) . DIRECTORY_SEPARATOR . strtolower( $exploded[1] ) . '-' . strtolower( $exploded[2] ) . DIRECTORY_SEPARATOR . $filename;
-						}
-					}
+				$paths[] = $path . $filename;
+			}
+
+			if ( isset( $name_parts[0] ) ) {
+
+				// Handle controls loading.
+				if ( 'Control' === $name_parts[0] ) {
+					$path  = dirname( __FILE__ ) . '/controls/';
+					$path .= strtolower( str_replace( '_', '-', str_replace( 'Kirki_Control_', '', $class_name ) ) ) . '/';
+
+					$paths[] = $path . $filename;
 				}
+
+				// Handle settings loading.
+				if ( 'Settings' === $name_parts[0] ) {
+					$path  = dirname( __FILE__ ) . '/controls/';
+					$path .= strtolower( str_replace( '_', '-', str_replace( array( 'Kirki_Settings_', '_Setting' ), '', $class_name ) ) ) . '/';
+
+					$paths[] = $path . $filename;
+				}
+			}
+
+			$paths[] = dirname( __FILE__ ) . '/core/' . $filename;
+			$paths[] = dirname( __FILE__ ) . '/lib/' . $filename;
+
+			$substr   = str_replace( 'Kirki_', '', $class_name );
+			$exploded = explode( '_', $substr );
+			$levels   = count( $exploded );
+
+			$previous_path = '';
+			for ( $i = 0; $i < $levels; $i++ ) {
+				$paths[] = dirname( __FILE__ ) . '/' . $previous_path . strtolower( $exploded[ $i ] ) . '/' . $filename;
+				$previous_path .= strtolower( $exploded[ $i ] ) . '/';
 			}
 
 			foreach ( $paths as $path ) {
+				$path = wp_normalize_path( $path );
 				if ( file_exists( $path ) ) {
-					include $path;
+					include_once $path;
 					return;
 				}
 			}
-
-		}
-
+		} // End if().
 	}
-	// Run the autoloader
+	// Run the autoloader.
 	spl_autoload_register( 'kirki_autoload_classes' );
-}
+} // End if().

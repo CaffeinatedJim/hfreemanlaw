@@ -776,7 +776,7 @@ class UpdraftPlus_S3
 	* @param string $bucket Bucket name
 	* @param string $uri Object URI
 	* @param mixed $saveTo Filename or resource to write to
-	* @param boolean resume, if possible
+	* @param mixed $resume - if $saveTo is a resource, then this is either false or the value for a Range: header; otherwise, a boolean, indicating whether to resume if possible.
 	* @return mixed
 	*/
 	public static function getObject($bucket, $uri, $saveTo = false, $resume = false)
@@ -784,9 +784,10 @@ class UpdraftPlus_S3
 		$rest = new UpdraftPlus_S3Request('GET', $bucket, $uri, self::$endpoint, self::$use_dns_bucket_name);
 		if ($saveTo !== false)
 		{
-			if (is_resource($saveTo))
+			if (is_resource($saveTo)) {
 				$rest->fp = $saveTo;
-			else
+				if (!is_bool($resume)) $rest->setHeader('Range', $resume);
+			} else {
 				if ($resume && file_exists($saveTo)) {
 					if (($rest->fp = @fopen($saveTo, 'ab')) !== false) {
 						$rest->setHeader('Range', "bytes=".filesize($saveTo).'-');
@@ -800,6 +801,7 @@ class UpdraftPlus_S3
 					else
 						$rest->response->error = array('code' => 0, 'message' => 'Unable to open save file for writing: '.$saveTo);
 				}
+			}
 		}
 		if ($rest->response->error === false) $rest->getResponse();
 
@@ -2233,16 +2235,16 @@ final class UpdraftPlus_S3Request
 			$data = trim($data);
 			if (strpos($data, ': ') === false) return $strlen;
 			list($header, $value) = explode(': ', $data, 2);
-			if ($header == 'Last-Modified')
+			if (strtolower($header) == 'last-modified')
 				$this->response->headers['time'] = strtotime($value);
-			elseif ($header == 'Content-Length')
+			elseif (strtolower($header) == 'content-length')
 				$this->response->headers['size'] = (int)$value;
-			elseif ($header == 'Content-Type')
+			elseif (strtolower($header) == 'content-type')
 				$this->response->headers['type'] = $value;
-			elseif ($header == 'ETag')
+			elseif (strtolower($header) == 'etag')
 				$this->response->headers['hash'] = $value{0} == '"' ? substr($value, 1, -1) : $value;
-			elseif (preg_match('/^x-amz-meta-.*$/', $header))
-				$this->response->headers[$header] = $value;
+			elseif (preg_match('/^x-amz-meta-.*$/i', $header))
+				$this->response->headers[strtolower($header)] = $value;
 		}
 		return $strlen;
 	}

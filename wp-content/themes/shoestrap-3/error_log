@@ -1,0 +1,5 @@
+[04-Apr-2016 03:15:19 UTC] PHP Fatal error:  Call to undefined function ss_get_template_part() in /home/hfreemanlaw/public_html/wp-content/themes/shoestrap-3/404.php on line 5
+[24-Oct-2016 01:26:04 UTC] PHP Fatal error:  Call to undefined function shoestrap_title() in /home/hfreemanlaw/public_html/wp-content/themes/shoestrap-3/index.php on line 2
+[18-Mar-2017 15:53:23 UTC] PHP Fatal error:  Call to undefined function ss_get_template_part() in /home/hfreemanlaw/public_html/wp-content/themes/shoestrap-3/404.php on line 5
+[24-Mar-2017 01:18:45 UTC] PHP Fatal error:  Call to undefined function ss_get_template_part() in /home/hfreemanlaw/public_html/wp-content/themes/shoestrap-3/404.php on line 5
+[30-Mar-2017 05:50:22 UTC] PHP Fatal error:  Call to undefined function ss_get_template_part() in /home/hfreemanlaw/public_html/wp-content/themes/shoestrap-3/404.php on line 5

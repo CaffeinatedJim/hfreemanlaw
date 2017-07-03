@@ -1,0 +1,1 @@
+[17-Jul-2015 03:24:06 UTC] PHP Fatal error:  Call to undefined function current_user_can() in /home/hfreemanlaw/public_html/wp-content/themes/shoestrap-child/functions.php on line 4
