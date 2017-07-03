@@ -1,0 +1,6 @@
+/nbproject/private/
+nbproject/
+wp-config.php
+/wp-content/uploads/
+.DS_Store
+dploy.yaml
