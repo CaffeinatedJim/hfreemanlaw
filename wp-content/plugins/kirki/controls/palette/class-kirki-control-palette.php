@@ -50,16 +50,9 @@ class Kirki_Control_Palette extends WP_Customize_Control {
 	 */
 	public function enqueue() {
 
-		if ( class_exists( 'Kirki_Custom_Build' ) ) {
-			Kirki_Custom_Build::register_dependency( 'jquery' );
-			Kirki_Custom_Build::register_dependency( 'customize-base' );
-			Kirki_Custom_Build::register_dependency( 'jquery-ui-button' );
-		}
-
-		if ( ! class_exists( 'Kirki_Custom_Build' ) || ! Kirki_Custom_Build::is_custom_build() ) {
-			wp_enqueue_script( 'kirki-palette', trailingslashit( Kirki::$url ) . 'controls/palette/palette.js', array( 'jquery', 'customize-base', 'jquery-ui-button' ), false, true );
-			wp_enqueue_style( 'kirki-palette-css', trailingslashit( Kirki::$url ) . 'controls/palette/palette.css', null );
-		}
+		wp_enqueue_script( 'kirki-dynamic-control', trailingslashit( Kirki::$url ) . 'assets/js/dynamic-control.js', array( 'jquery', 'customize-base' ), false, true );
+		wp_enqueue_script( 'kirki-palette', trailingslashit( Kirki::$url ) . 'controls/palette/palette.js', array( 'jquery', 'customize-base', 'kirki-dynamic-control', 'jquery-ui-button' ), false, true );
+		wp_enqueue_style( 'kirki-palette-css', trailingslashit( Kirki::$url ) . 'controls/palette/palette.css', null );
 	}
 
 	/**
@@ -99,7 +92,6 @@ class Kirki_Control_Palette extends WP_Customize_Control {
 	 */
 	protected function content_template() {
 		?>
-		<div class="kirki-controls-loading-spinner"><div class="bounce1"></div><div class="bounce2"></div><div class="bounce3"></div></div>
 		<# if ( ! data.choices ) { return; } #>
 		<span class="customize-control-title">
 			{{ data.label }}

@@ -142,10 +142,17 @@ class Kirki_Helper {
 	 */
 	public static function get_posts( $args ) {
 
-		// Get the posts.
-		if ( ! isset( $args['suppress_filters'] ) ) {
+		if ( is_string( $args ) ) {
+			$args = add_query_arg(
+				array(
+					'suppress_filters' => false,
+				)
+			);
+		} elseif ( is_array( $args ) && ! isset( $args['suppress_filters'] ) ) {
 			$args['suppress_filters'] = false;
 		}
+
+		// Get the posts.
 		$posts = get_posts( $args );
 
 		// Properly format the array.
@@ -171,9 +178,11 @@ class Kirki_Helper {
 		$items = array();
 
 		// Get the taxonomies.
-		$taxonomies = get_taxonomies( array(
-			'public' => true,
-		) );
+		$taxonomies = get_taxonomies(
+			array(
+				'public' => true,
+			)
+		);
 
 		// Build the array.
 		foreach ( $taxonomies as $taxonomy ) {
@@ -198,9 +207,11 @@ class Kirki_Helper {
 		$items = array();
 
 		// Get the post types.
-		$post_types = get_post_types( array(
-			'public' => true,
-		), 'objects' );
+		$post_types = get_post_types(
+			array(
+				'public' => true,
+			), 'objects'
+		);
 
 		// Build the array.
 		foreach ( $post_types as $post_type ) {
@@ -284,6 +295,7 @@ class Kirki_Helper {
 			case 'A200':
 			case 'A400':
 			case 'A700':
+				$key = $context / 100;
 				if ( 'A100' === $context ) {
 					$key = 10;
 					unset( $colors['grey'] );
@@ -296,8 +308,6 @@ class Kirki_Helper {
 				} elseif ( 'A700' === $context ) {
 					$key = 13;
 					unset( $colors['grey'] );
-				} else {
-					$key = $context / 100;
 				}
 				unset( $colors['primary'] );
 				$position_colors = array();
