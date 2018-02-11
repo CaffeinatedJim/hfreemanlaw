@@ -1,2 +1,4 @@
 [24-Oct-2016 01:25:43 UTC] PHP Fatal error:  Call to undefined function _deprecated_file() in /home/hfreemanlaw/public_html/wp-includes/rss-functions.php on line 8
 [22-Mar-2017 13:50:00 UTC] PHP Fatal error:  Call to undefined function _deprecated_file() in /home/hfreemanlaw/public_html/wp-includes/registration-functions.php on line 7
+[27-Nov-2017 15:02:48 UTC] PHP Fatal error:  Class 'Walker' not found in /home/hfreemanlaw/public_html/wp-includes/class-walker-nav-menu.php on line 17
+[19-Jan-2018 22:53:36 UTC] PHP Fatal error:  Call to undefined function _deprecated_file() in /home/hfreemanlaw/public_html/wp-includes/locale.php on line 10
