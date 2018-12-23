@@ -46,10 +46,10 @@ function monsterinsights_track_user() {
 	}
 
 	$track_super_admin = apply_filters( 'monsterinsights_track_super_admins', false );
-	if ( $track_super_admin === false && is_super_admin() ) {
+	if ( $track_super_admin === false && is_multisite() && is_super_admin() ) {
 		$track_user = false;
 	}
-	
+
 	// or if UA code is not entered
 	$ua_code = monsterinsights_get_ua();
 	if ( empty( $ua_code ) ) {
@@ -64,7 +64,7 @@ function monsterinsights_get_client_id( $payment_id = false ) {
 		$payment_id = $payment_id->ID;
 	}
 	$user_cid    = monsterinsights_get_uuid();
-	$payment_cid = get_post_meta( $payment_id, '_yoast_gau_uuid', true );
+	$saved_cid   = ! empty( $payment_id ) ? get_post_meta( $payment_id, '_yoast_gau_uuid', true ) : false;
 
 	if ( ! empty( $payment_id ) && ! empty( $saved_cid ) ) {
 		return $saved_cid;
@@ -267,6 +267,48 @@ function monsterinsights_get_message( $type = 'error', $text = '' ) {
 	}
 }
 
+function monsterinsights_is_dev_url( $url = '' ) {
+	$is_local_url = false;
+	// Trim it up
+	$url = strtolower( trim( $url ) );
+	// Need to get the host...so let's add the scheme so we can use parse_url
+	if ( false === strpos( $url, 'http://' ) && false === strpos( $url, 'https://' ) ) {
+		$url = 'http://' . $url;
+	}
+	$url_parts = parse_url( $url );
+	$host      = ! empty( $url_parts['host'] ) ? $url_parts['host'] : false;
+	if ( ! empty( $url ) && ! empty( $host ) ) {
+		if ( false !== ip2long( $host ) ) {
+			if ( ! filter_var( $host, FILTER_VALIDATE_IP, FILTER_FLAG_NO_PRIV_RANGE | FILTER_FLAG_NO_RES_RANGE ) ) {
+				$is_local_url = true;
+			}
+		} else if ( 'localhost' === $host ) {
+			$is_local_url = true;
+		}
+
+		$tlds_to_check = array( '.dev', '.local', ':8888' );
+		foreach ( $tlds_to_check as $tld ) {
+				if ( false !== strpos( $host, $tld ) ) {
+					$is_local_url = true;
+					continue;
+				}
+			
+		}
+		if ( substr_count( $host, '.' ) > 1 ) {
+			$subdomains_to_check =  array( 'dev.', '*.staging.', 'beta.', 'test.' );
+			foreach ( $subdomains_to_check as $subdomain ) {
+				$subdomain = str_replace( '.', '(.)', $subdomain );
+				$subdomain = str_replace( array( '*', '(.)' ), '(.*)', $subdomain );
+				if ( preg_match( '/^(' . $subdomain . ')/', $host ) ) {
+					$is_local_url = true;
+					continue;
+				}
+			}
+		}
+	}
+	return $is_local_url;
+}
+
 // Set cookie to expire in 2 years
 function monsterinsights_get_cookie_expiration_date( $time ) {
 	return date('D, j F Y H:i:s', time() + $time );
@@ -421,7 +463,7 @@ function monsterinsights_get_country_list( $translated = false ) {
 			'LT' => __( 'Lithuania', 'google-analytics-for-wordpress' ),
 			'LU' => __( 'Luxembourg', 'google-analytics-for-wordpress' ),
 			'MO' => __( 'Macau', 'google-analytics-for-wordpress' ),
-			'MK' => __( 'Macedonia', 'google-analytics-for-wordpress' ),
+			'MK' => __( 'Macedonia (FYROM)', 'google-analytics-for-wordpress' ),
 			'MG' => __( 'Madagascar', 'google-analytics-for-wordpress' ),
 			'MW' => __( 'Malawi', 'google-analytics-for-wordpress' ),
 			'MY' => __( 'Malaysia', 'google-analytics-for-wordpress' ),
@@ -698,7 +740,7 @@ function monsterinsights_get_country_list( $translated = false ) {
 			'MS' => 'Montserrat',
 			'MA' => 'Morocco',
 			'MZ' => 'Mozambique',
-			'MM' => 'Myanmar',
+			'MM' => 'Myanmar (Burma)',
 			'NA' => 'Namibia',
 			'NR' => 'Nauru',
 			'NP' => 'Nepal',
@@ -731,7 +773,7 @@ function monsterinsights_get_country_list( $translated = false ) {
 			'XK' => 'Republic of Kosovo',
 			'RE' => 'Reunion Island',
 			'RO' => 'Romania',
-			'RU' => 'Russian Federation',
+			'RU' => 'Russia',
 			'RW' => 'Rwanda',
 			'BL' => 'Saint Barth&eacute;lemy',
 			'SH' => 'Saint Helena',
@@ -802,6 +844,14 @@ function monsterinsights_get_country_list( $translated = false ) {
 	return $countries;
 }
 
+function monsterinsights_get_api_url(){
+	return apply_filters( 'monsterinsights_get_api_url', 'api.monsterinsights.com/v2/' );
+}
+
+function monsterinsights_get_licensing_url(){
+	return apply_filters( 'monsterinsights_get_licensing_url', 'https://www.monsterinsights.com' );
+}
+
 function monsterinsights_is_wp_seo_active( ) {
 	$wp_seo_active = false; // @todo: improve this check. This is from old Yoast code.
 	
@@ -814,7 +864,7 @@ function monsterinsights_is_wp_seo_active( ) {
 }
 
 function monsterinsights_get_asset_version() {
-	if ( monsterinsights_is_debug_mode() ) {
+	if ( monsterinsights_is_debug_mode() || ( defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ) ) {
 		return time();
 	} else {
 		return MONSTERINSIGHTS_VERSION;
@@ -933,3 +983,27 @@ if ( ! function_exists ( 'remove_class_action' ) ) {
 		remove_class_filter( $tag, $class_name, $method_name, $priority );
 	}
 } // End function exists
+
+/**
+ * Format a big number, instead of 1000000 you get 1.0M, works with billions also.
+ *
+ * @param int $number
+ * @param int $precision
+ *
+ * @return string
+ */
+function monsterinsights_round_number( $number, $precision = 2 ) {
+
+	if ( $number < 1000000 ) {
+		// Anything less than a million
+		$number = number_format_i18n( $number );
+	} else if ( $number < 1000000000 ) {
+		// Anything less than a billion
+		$number = number_format_i18n( $number / 1000000, $precision ) . 'M';
+	} else {
+		// At least a billion
+		$number = number_format_i18n( $number / 1000000000, $precision ) . 'B';
+	}
+
+	return $number;
+}

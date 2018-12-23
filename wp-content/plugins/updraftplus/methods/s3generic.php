@@ -9,6 +9,8 @@ require_once(UPDRAFTPLUS_DIR.'/methods/s3.php');
  */
 class UpdraftPlus_BackupModule_s3generic extends UpdraftPlus_BackupModule_s3 {
 
+	protected $use_v4 = false;
+
 	protected function set_region($obj, $region = '', $bucket_name = '') {
 		$config = $this->get_config();
 		$endpoint = ('' != $region && 'n/a' != $region) ? $region : $config['endpoint'];
@@ -101,7 +103,8 @@ class UpdraftPlus_BackupModule_s3generic extends UpdraftPlus_BackupModule_s3 {
 		return '<tr class="'.$this->get_css_classes().'">
 					<th>'.sprintf(__('%s end-point', 'updraftplus'), 'S3').'</th>
 					<td>
-						<input data-updraft_settings_test="endpoint" type="text" style="width: 360px" '.$this->output_settings_field_name_and_id('endpoint', true).' value="{{endpoint}}" />
+						<input data-updraft_settings_test="endpoint" type="text" class="updraft_input--wide" '.$this->output_settings_field_name_and_id('endpoint', true).' value="{{endpoint}}" />
+					</td>
 				</tr>';
 	}
 

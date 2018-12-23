@@ -66,7 +66,7 @@
             }
 
             public static function isLocalHost() {
-                return ( $_SERVER['REMOTE_ADDR'] === '127.0.0.1' || $_SERVER['REMOTE_ADDR'] === 'localhost' ) ? 1 : 0;
+                return ( isset($_SERVER['REMOTE_ADDR']) && ($_SERVER['REMOTE_ADDR'] === '127.0.0.1' || $_SERVER['REMOTE_ADDR'] === 'localhost' )) ? 1 : 0;
             }
 
             public static function isWpDebug() {
@@ -502,9 +502,12 @@
                     if ( ! is_wp_error( $response ) && $response['response']['code'] >= 200 && $response['response']['code'] < 300 ) {
                         $sysinfo['wp_remote_get']       = 'true';
                         $sysinfo['wp_remote_get_error'] = '';
-                    } else {
+                    } elseif( is_wp_error( $response ) ) {
                         $sysinfo['wp_remote_get']       = 'false';
                         $sysinfo['wp_remote_get_error'] = $response->get_error_message();
+                    } else {
+                        $sysinfo['wp_remote_get']       = 'false';
+                        $sysinfo['wp_remote_get_error'] = $response['response']['code'] . (isset($response['response']['message']) ? $response['response']['message'] : '');
                     }
                 }
 
@@ -517,10 +520,12 @@
                 $sysinfo['plugins'] = array();
 
                 foreach ( $active_plugins as $plugin ) {
-                    $plugin_data = @get_plugin_data( WP_PLUGIN_DIR . '/' . $plugin );
-                    $plugin_name = esc_html( $plugin_data['Name'] );
+                    if (file_exists(WP_PLUGIN_DIR . '/' . $plugin)) {
+                        $plugin_data = @get_plugin_data( WP_PLUGIN_DIR . '/' . $plugin );
+                        $plugin_name = esc_html( $plugin_data['Name'] );
 
-                    $sysinfo['plugins'][ $plugin_name ] = $plugin_data;
+                        $sysinfo['plugins'][ $plugin_name ] = $plugin_data;
+                    }
                 }
 
                 $redux = ReduxFrameworkInstances::get_all_instances();
